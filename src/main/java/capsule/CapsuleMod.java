@@ -50,9 +50,12 @@ public class CapsuleMod implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        ForgeConfigRegistry.INSTANCE.register(MODID, ModConfig.Type.COMMON, Config.COMMON_CONFIG);
+        // listen first: a common config is loaded as soon as it is registered, and Forge Config API Port fires "loading" then
         ModConfigEvents.loading(MODID).register(CapsuleMod::onModConfig);
         ModConfigEvents.reloading(MODID).register(CapsuleMod::onModConfig);
+        ModConfig commonConfig = ForgeConfigRegistry.INSTANCE.register(MODID, ModConfig.Type.COMMON, Config.COMMON_CONFIG);
+        // safety net: the data reload needs the baked paths, never let it run on an unbaked config
+        if (!Config.isBaked()) onModConfig(commonConfig);
 
         CapsuleBlocks.registerBlocks(null);
         CapsuleItems.registerItems(null);
@@ -93,15 +96,21 @@ public class CapsuleMod implements ModInitializer {
 }
 
 class StructureSaverReloadListener extends SimplePreparableReloadListener<Void> implements IdentifiableResourceReloadListener {
+    private static final org.apache.logging.log4j.Logger LOGGER = LogManager.getLogger("capsule");
     @Override
     public ResourceLocation getFabricId() {
         return new ResourceLocation(CapsuleMod.MODID, "structure_saver");
     }
 
     protected Void prepare(ResourceManager pResourceManager, ProfilerFiller pProfiler) {
-        StructureSaver.getRewardManager(pResourceManager).onResourceManagerReload(pResourceManager);
-        for (CapsuleTemplateManager ctm : StructureSaver.CapsulesManagers.values()) {
-            ctm.onResourceManagerReload(pResourceManager);
+        try {
+            StructureSaver.getRewardManager(pResourceManager).onResourceManagerReload(pResourceManager);
+            for (CapsuleTemplateManager ctm : StructureSaver.CapsulesManagers.values()) {
+                ctm.onResourceManagerReload(pResourceManager);
+            }
+        } catch (Throwable t) {
+            LOGGER.error("Capsule could not prepare its templates on data reload (a failure here stalls the whole reload)", t);
+            throw t;
         }
         return (Void) null;
     }

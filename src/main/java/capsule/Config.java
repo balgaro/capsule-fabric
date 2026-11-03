@@ -102,6 +102,11 @@ public class Config {
         return FabricLoader.getInstance().getConfigDir().resolve("capsule");
     }
 
+    /** Whether bakeConfig has run: the paths below stay null until then. */
+    public static boolean isBaked() {
+        return rewardTemplatesPath != null;
+    }
+
     public static void bakeConfig(final ModConfig config) {
         // init paths properties from config
         List<CommentedConfig> templatesPaths = Config.lootTemplatesPathsCfg.get();
