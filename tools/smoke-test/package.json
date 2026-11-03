@@ -1,0 +1,11 @@
+{
+  "name": "capsule-fabric-smoke-test",
+  "private": true,
+  "description": "Drives a Fabric 1.20.1 test server with a bot to check capture and deploy of Capsule",
+  "scripts": {
+    "test": "node test.js && node test-throw.js"
+  },
+  "dependencies": {
+    "mineflayer": "^4.23.0"
+  }
+}

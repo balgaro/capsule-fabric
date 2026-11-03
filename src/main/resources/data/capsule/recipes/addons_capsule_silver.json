@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "capsule",
+  "result": {
+    "item": "capsule:capsule",
+    "nbt": {
+      "state": 0,
+      "color": 13622502,
+      "size": 5
+    }
+  },
+  "pattern": [
+    " b ",
+    "#e#",
+    " i "
+  ],
+  "key": {
+    "#": {
+      "tag": "c:silver_ingots"
+    },
+    "b": {
+      "item": "minecraft:stone_button"
+    },
+    "e": {
+      "tag": "c:ender_pearls"
+    },
+    "i": {
+      "tag": "c:iron_ingots"
+    }
+  },
+  "fabric:load_conditions": [
+    {
+      "condition": "fabric:tags_populated",
+      "registry": "minecraft:item",
+      "values": [
+        "c:silver_ingots"
+      ]
+    }
+  ]
+}

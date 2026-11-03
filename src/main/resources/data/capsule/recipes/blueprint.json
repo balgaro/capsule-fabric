@@ -1,0 +1,73 @@
+{
+  "type": "capsule:blueprint_capsule",
+  "result": {
+    "item": "capsule:capsule",
+    "nbt": {
+      "state": 3,
+      "display": {
+        "color": 3949738
+      },
+      "sourceInventory": {},
+      "structureName": "generated_blueprint_copy_path",
+      "label": "Copy Any Capsule",
+      "size": 1
+    }
+  },
+  "pattern": [
+    " b ",
+    "lcl",
+    " p "
+  ],
+  "key": {
+    "c": {
+      "fabric:type": "fabric:any",
+      "ingredients": [
+        {
+          "item": "capsule:capsule",
+          "nbt": {
+            "state": 2
+          },
+          "fabric:type": "capsule:ingredient"
+        },
+        {
+          "item": "capsule:capsule",
+          "nbt": {
+            "state": 5
+          },
+          "fabric:type": "capsule:ingredient"
+        },
+        {
+          "item": "capsule:capsule",
+          "nbt": {
+            "state": 3,
+            "sourceInventory": {},
+            "display": {
+              "color": 3949738
+            }
+          },
+          "fabric:type": "capsule:ingredient"
+        },
+        {
+          "item": "capsule:capsule",
+          "nbt": {
+            "state": 7,
+            "sourceInventory": {},
+            "display": {
+              "color": 3949738
+            }
+          },
+          "fabric:type": "capsule:ingredient"
+        }
+      ]
+    },
+    "b": {
+      "item": "minecraft:stone_button"
+    },
+    "p": {
+      "item": "minecraft:paper"
+    },
+    "l": {
+      "tag": "c:blue_dyes"
+    }
+  }
+}

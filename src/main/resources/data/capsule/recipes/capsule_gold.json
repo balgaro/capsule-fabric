@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "group": "capsule",
+  "result": {
+    "item": "capsule:capsule",
+    "nbt": {
+      "state": 0,
+      "color": 16766720,
+      "size": 5
+    }
+  },
+  "pattern": [
+    " b ",
+    "#e#",
+    " i "
+  ],
+  "key": {
+    "#": {
+      "tag": "c:gold_ingots"
+    },
+    "b": {
+      "item": "minecraft:stone_button"
+    },
+    "e": {
+      "tag": "c:ender_pearls"
+    },
+    "i": {
+      "tag": "c:iron_ingots"
+    }
+  }
+}

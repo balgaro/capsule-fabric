@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "capsule",
+  "version": "${version}",
+  "name": "Capsule",
+  "description": "Bring your base! Capsules can capture a region containing any blocks or machines, then deploy and undeploy at will. Inspired by Dragon Ball capsules. (Fabric port of Lythom's Capsule.)",
+  "authors": ["Lythom", "Fabric port by the Homestead server"],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/capsule",
+    "sources": "https://github.com/Lythom/capsule",
+    "issues": "https://github.com/Lythom/capsule/issues"
+  },
+  "license": "MIT",
+  "icon": "capsule_base.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["capsule.CapsuleMod"],
+    "client": ["capsule.client.CapsuleClient"],
+    "jei_mod_plugin": ["capsule.plugins.jei.CapsulePlugin"]
+  },
+  "accessWidener": "capsule.accesswidener",
+  "mixins": ["capsule.mixins.json"],
+  "depends": {
+    "fabricloader": ">=0.15.0",
+    "minecraft": "~1.20.1",
+    "java": ">=17",
+    "fabric-api": "*",
+    "forgeconfigapiport": ">=8.0.0"
+  }
+}

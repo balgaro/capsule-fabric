@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "capsule.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ServerLevelMixin",
+    "ItemEntityMixin"
+  ],
+  "client": [
+    "MinecraftMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

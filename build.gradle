@@ -1,0 +1,52 @@
+plugins {
+    id 'fabric-loom' version '1.8-SNAPSHOT'
+    id 'maven-publish'
+}
+
+version = "${project.minecraft_version}-${project.capsule_version}"
+group = 'fr.samuelbouchet.capsule'
+base { archivesName = 'Capsule-Fabric' }
+
+repositories {
+    maven { url = 'https://maven.fabricmc.net/' }
+    maven { url = 'https://raw.githubusercontent.com/Fuzss/modresources/main/maven/' }   // Forge Config API Port
+    maven { url = 'https://maven.blamejared.com/' }                                       // JEI
+    maven { url = 'https://maven.terraformersmc.com/' }
+    maven {
+        url = 'https://api.modrinth.com/maven'
+        content { includeGroup 'maven.modrinth' }
+    }
+    mavenCentral()
+}
+
+dependencies {
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings loom.officialMojangMappings()
+    compileOnly 'com.google.code.findbugs:jsr305:3.0.2'
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:${project.forgeconfigapiport_version}"
+    modCompileOnly "mezz.jei:jei-${project.minecraft_version}-fabric-api:${project.jei_version}"
+    // claim protection mods Capsule can ask (compile only: they are optional at runtime)
+    modCompileOnly "maven.modrinth:flan:Tc08lTqp"
+}
+
+loom {
+    accessWidenerPath = file('src/main/resources/capsule.accesswidener')
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.release = 17
+}
+
+java {
+    withSourcesJar()
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+processResources {
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand 'version': project.version }
+}

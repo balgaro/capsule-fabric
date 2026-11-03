@@ -1,0 +1,9 @@
+# gradle / loom
+.gradle/
+build/
+run/
+out/
+*.iml
+.idea/
+# smoke test
+tools/smoke-test/node_modules/

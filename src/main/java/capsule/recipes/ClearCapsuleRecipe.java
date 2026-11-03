@@ -1,0 +1,113 @@
+package capsule.recipes;
+
+import capsule.items.CapsuleItem;
+import capsule.items.CapsuleItems;
+import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CustomRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.Level;
+
+import java.util.Collections;
+import java.util.Set;
+import java.util.WeakHashMap;
+
+import static capsule.items.CapsuleItem.CapsuleState.DEPLOYED;
+import static capsule.items.CapsuleItem.CapsuleState.EMPTY;
+
+public class ClearCapsuleRecipe extends CustomRecipe {
+    /**
+     * Capsules that a craft put back in the grid. Shift-click crafting goes on while the result is a capsule, so it would
+     * then clear them; they can be cleared once moved by the player.
+     */
+    private static final Set<ItemStack> GIVEN_BACK = Collections.synchronizedSet(Collections.newSetFromMap(new WeakHashMap<>()));
+
+    public static ItemStack givenBack(ItemStack capsule) {
+        GIVEN_BACK.add(capsule);
+        return capsule;
+    }
+
+    public ClearCapsuleRecipe(ResourceLocation id, CraftingBookCategory category) {
+        super(id, category);
+    }
+
+
+    @Override
+    public RecipeSerializer<?> getSerializer() {
+        return CapsuleRecipes.CLEAR_CAPSULE_SERIALIZER.get();
+    }
+
+    /**
+     * Used to check if a recipe matches current crafting inventory
+     */
+    public boolean matches(CraftingContainer inv, Level worldIn) {
+        int sourceCapsule = 0;
+        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+        for (int i = 0; i < nonnulllist.size(); ++i) {
+            ItemStack itemstack = inv.getItem(i);
+
+            if (canBeEmptyCapsule(itemstack)) {
+                sourceCapsule++;
+            } else if (!itemstack.isEmpty()) {
+                return false;
+            }
+
+        }
+
+        return sourceCapsule == 1;
+    }
+
+    /**
+     * Returns an Item that is the result of this recipe
+     */
+    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
+        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+
+        for (int i = 0; i < nonnulllist.size(); ++i) {
+            ItemStack itemstack = inv.getItem(i);
+
+            if (canBeEmptyCapsule(itemstack)) {
+                ItemStack copy = itemstack.copy();
+                CapsuleItem.clearCapsule(copy);
+                return copy;
+
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public boolean canBeEmptyCapsule(ItemStack itemstack) {
+        if (!(itemstack.getItem() instanceof CapsuleItem) || GIVEN_BACK.contains(itemstack)) return false;
+        return CapsuleItem.isLinkedStateCapsule(itemstack) || (CapsuleItem.hasState(itemstack, DEPLOYED) && !CapsuleItem.isBlueprint(itemstack));
+    }
+
+    @Override
+    public boolean canCraftInDimensions(int width, int height) {
+        return width * height >= 1;
+    }
+
+    public ItemStack getResultItem(RegistryAccess registryAccess) {
+        return CapsuleItems.withState(EMPTY);
+    }
+
+    public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
+        NonNullList<ItemStack> nonnulllist = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+
+        for (int i = 0; i < nonnulllist.size(); ++i) {
+            ItemStack itemstack = inv.getItem(i);
+            nonnulllist.set(i, itemstack.getItem().getRecipeRemainder(itemstack));
+            if (itemstack.getItem() instanceof CapsuleItem && !CapsuleItem.hasState(itemstack, DEPLOYED)) {
+                // Copy the capsule and give back a recovery capsule of the previous content
+                ItemStack copy = itemstack.copy();
+                CapsuleItem.setOneUse(copy);
+                nonnulllist.set(i, copy);
+            }
+        }
+
+        return nonnulllist;
+    }
+}
