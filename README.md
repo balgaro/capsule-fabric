@@ -4,7 +4,7 @@ An unofficial **Fabric 1.20.1 port** of [Capsule by Lythom](https://github.com/L
 containing any blocks or machines, then deploy and undeploy it at will. Inspired by Dragon Ball capsules.
 
 All the credit for the mod itself goes to **Lythom (Samuel Bouchet)**. This repository only adapts the 1.20 (Forge) branch to
-Fabric; the original is MIT licensed and so is this port (see [LICENSE.md](LICENSE.md)). The original mod pages and wiki still
+Fabric; the original is MIT licensed and so is this port (see [LICENSE](LICENSE)). The original mod pages and wiki still
 describe how capsules work: [CurseForge](https://www.curseforge.com/minecraft/mc-mods/capsule),
 [wiki](https://github.com/Lythom/capsule/wiki). The original README is kept as [UPSTREAM_README.md](UPSTREAM_README.md).
 
